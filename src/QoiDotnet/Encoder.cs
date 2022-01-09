@@ -33,7 +33,7 @@ public static class Encoder
         {
             //check if previously seen
             bool seen = false;
-            byte index = GetIndexPosition(pixel);
+            int index = GetIndexPosition(pixel);
             if (previouslySeen[index] == pixel)
                 seen = true;
             else
@@ -67,7 +67,7 @@ public static class Encoder
                 fileToEncode.FileData.Add(pixel);
 
             //cleanup
-            runLength = 0;
+            runLength = -1;
             previousPixel = pixel;
         }
 
@@ -87,14 +87,14 @@ public static class Encoder
         return new Rgba(0, 0, 0, 255);
     }
 
-    private static byte GetIndexPosition(Rgba pixel)
+    private static int GetIndexPosition(Rgba pixel)
     {
-        return (byte)((
-            (byte)(pixel.R * 3) +
-            (byte)(pixel.G * 5) +
-            (byte)(pixel.B * 7) +
-            (byte)(pixel.A * 11))
-            % 64);
+        return (
+            pixel.R * 3 +
+            pixel.G * 5 +
+            pixel.B * 7 +
+            pixel.A * 11)
+            % 64;
     }
 
     private static IEnumerable<Rgba> EnumeratePixelsRgbA(IEnumerable<byte> byteArray)

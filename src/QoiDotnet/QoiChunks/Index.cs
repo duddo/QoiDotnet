@@ -20,13 +20,17 @@ internal record struct Index(byte IndexPosition) : IChunk
 {
     public byte Tag => 0x0;
 
-    public IEnumerable<byte> ToBytes()
+    public Index(int index)
+        : this((byte)index)
     {
         if (IndexPosition < 0 || IndexPosition > 63)
-            throw new Exception("Run Length exceeds range: [0, 63]");
+            throw new Exception("Run Length exceeds range: [0, 63] Was: " + index);
+    }
 
+    public IEnumerable<byte> ToBytes()
+    {
         byte res = (byte)(Tag << 6);
-        res += (byte)IndexPosition;
+        res += IndexPosition;
 
         return new byte[] { res };
     }
